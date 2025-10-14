@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caribbean Matchmaker Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 50%, #2563eb 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .screen {
+            display: none;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        .icon {
+            font-size: 80px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 48px;
+            color: #1f2937;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        
+        h2 {
+            font-size: 32px;
+            color: #1f2937;
+            margin-bottom: 30px;
+        }
+        
+        p {
+            font-size: 18px;
+            color: #4b5563;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #fb923c 0%, #ec4899 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 20px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(236, 72, 153, 0.3);
+        }
+        
+        .progress-bar {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(135deg, #fb923c 0%, #ec4899 100%);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+        
+        .option-btn {
+            background: white;
+            border: 2px solid #e5e7eb;
+            padding: 20px;
+            font-size: 18px;
+            color: #374151;
+            border-radius: 15px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 15px;
+            text-align: left;
+            transition: all 0.2s;
+        }
+        
+        .option-btn:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+            transform: scale(1.02);
+        }
+        
+        .result-box {
+            background: linear-gradient(135deg, #eff6ff 0%, #e0f2fe 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .result-title {
+            font-size: 56px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .result-name {
+            font-size: 42px;
+            font-weight: bold;
+            color: #1f2937;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .result-tagline {
+            font-size: 24px;
+            color: #2563eb;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .result-section {
+            margin-bottom: 20px;
+        }
+        
+        .result-section h3 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+        
+        .result-section p {
+            color: #374151;
+            text-align: left;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: none;
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            flex: 1;
+            min-width: 200px;
+            transition: all 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        .dest-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .dest-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 25px;
+            transition: border-color 0.2s;
+        }
+        
+        .dest-card:hover {
+            border-color: #3b82f6;
+        }
+        
+        .dest-header {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .dest-icon {
+            font-size: 40px;
+        }
+        
+        .dest-info h3 {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 5px;
+        }
+        
+        .dest-info .tagline {
+            font-size: 16px;
+            color: #2563eb;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .dest-info .description {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        
+        .dest-info .recommendation {
+            font-size: 14px;
+            color: #374151;
+            text-align: left;
+        }
+        
+        .dest-info .recommendation strong {
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 36px;
+            }
+            
+            h2 {
+                font-size: 24px;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn-secondary {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Welcome Screen -->
+        <div id="welcome" class="screen active">
+            <div class="icon">🏝️</div>
+            <h1>Caribbean Matchmaker</h1>
+            <p>Not sure which Caribbean destination is right for you? Take our quick quiz to find your perfect island paradise!</p>
+            <button class="btn-primary" onclick="startQuiz()">Find My Perfect Destination</button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz" class="screen">
+            <div class="progress-text">
+                <span id="questionNumber">Question 1 of 5</span>
+                <span id="progressPercent">20%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 20%"></div>
+            </div>
+            <h2 id="questionText"></h2>
+            <div id="optionsContainer"></div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results" class="screen">
+            <div class="result-box">
+                <div class="result-title" id="resultIcon"></div>
+                <div class="result-name" id="resultName"></div>
+                <div class="result-tagline" id="resultTagline"></div>
+                
+                <div class="result-section">
+                    <h3>Why it's perfect for you:</h3>
+                    <p id="resultDescription"></p>
+                </div>
+                
+                <div class="result-section" style="border-top: 2px solid #bfdbfe; padding-top: 20px;">
+                    <h3>Where to stay:</h3>
+                    <p id="resultRecommendation"></p>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn-primary" onclick="resetQuiz()">Take Quiz Again</button>
+                <button class="btn-secondary" onclick="showAllDestinations()">View All Destinations</button>
+            </div>
+        </div>
+
+        <!-- All Destinations Screen -->
+        <div id="allDestinations" class="screen">
+            <h1 style="margin-bottom: 30px;">All Caribbean Destinations</h1>
+            <div class="dest-grid" id="destinationsGrid"></div>
+            <button class="btn-primary" onclick="resetQuiz()">Retake the Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        const destinations = {
+            turks: {
+                name: "Turks and Caicos",
+                icon: "🏖️",
+                tagline: "Fly and flop on pristine beaches",
+                description: "Direct flights from major cities. Perfect for unplugging.",
+                recommendation: "Grace Bay Club (family-friendly) or Amanyara (ultra luxury)"
+            },
+            stbarths: {
+                name: "St. Barth's",
+                icon: "✨",
+                tagline: "See and be seen",
+                description: "The Caribbean's South of France. Chic boutiques, buzzy restaurants, gorgeous beaches.",
+                recommendation: "Eden Roc or Rosewood Le Guanahani"
+            },
+            stlucia: {
+                name: "St. Lucia",
+                icon: "🏔️",
+                tagline: "Adventure awaits",
+                description: "Iconic twin Pitons rising from the sea. Rainforest hiking, world-class diving, water sports. Perfect for active travelers and honeymooners.",
+                recommendation: "Sugar Beach, A Viceroy Resort or Bodyholiday (wellness focus)"
+            },
+            jamaica: {
+                name: "Jamaica",
+                icon: "🌴",
+                tagline: "Romance and culture",
+                description: "All-inclusive options, lush mountains, amazing culture. Perfect for couples or honeymoons.",
+                recommendation: "Round Hill Hotel or Moon Palace Jamaica"
+            },
+            anguilla: {
+                name: "Anguilla",
+                icon: "👨‍👩‍👧‍👦",
+                tagline: "Perfect for families",
+                description: "Small, safe, easy to navigate. Calm beaches perfect for kids.",
+                recommendation: "Four Seasons Anguilla"
+            },
+            belize: {
+                name: "Belize",
+                icon: "🤿",
+                tagline: "Diver's paradise",
+                description: "Largest barrier reef in Northern Hemisphere. World-class diving and marine life.",
+                recommendation: "Turtle Inn or Matachica Resort"
+            },
+            cruise: {
+                name: "Caribbean Cruise",
+                icon: "🛳️",
+                tagline: "Can't decide? See them all!",
+                description: "Experience multiple islands in one trip. Royal Caribbean, Celebrity, Princess Cruises. Wake up in a new port every day.",
+                recommendation: "Plus - Maybe you lost your passport… no problem!"
+            },
+            usIslands: {
+                name: "Puerto Rico or USVI",
+                icon: "🇺🇸",
+                tagline: "No passport needed",
+                description: "Puerto Rico blends Caribbean beauty with vibrant culture. USVI offers St. Thomas for shopping and sailing, St. John for pristine beaches and hiking, St. Croix for history and culture.",
+                recommendation: "Perfect if you haven't gotten around to getting a passport"
+            }
+        };
+
+        const questions = [
+            {
+                question: "What's your ideal vacation vibe?",
+                options: [
+                    { text: "Unplugging on pristine beaches", scores: { turks: 3 } },
+                    { text: "Chic atmosphere and social scene", scores: { stbarths: 3 } },
+                    { text: "Adventure and exploration", scores: { stlucia: 3, belize: 2 } },
+                    { text: "Romantic getaway", scores: { jamaica: 3, stlucia: 2 } },
+                    { text: "Not sure, want variety", scores: { cruise: 3 } }
+                ]
+            },
+            {
+                question: "Who are you traveling with?",
+                options: [
+                    { text: "My partner/spouse", scores: { jamaica: 2, stlucia: 2 } },
+                    { text: "Family with kids", scores: { anguilla: 3, turks: 2 } },
+                    { text: "Solo or friends", scores: { stbarths: 2, belize: 2 } },
+                    { text: "Large group", scores: { cruise: 2, jamaica: 1 } }
+                ]
+            },
+            {
+                question: "What activities sound most appealing?",
+                options: [
+                    { text: "Beach lounging and spa time", scores: { turks: 3, jamaica: 2 } },
+                    { text: "Shopping and fine dining", scores: { stbarths: 3 } },
+                    { text: "Hiking and water sports", scores: { stlucia: 3 } },
+                    { text: "Scuba diving and snorkeling", scores: { belize: 3, stlucia: 2 } },
+                    { text: "A little bit of everything", scores: { cruise: 3 } }
+                ]
+            },
+            {
+                question: "What's your accommodation style?",
+                options: [
+                    { text: "Ultra-luxury resort", scores: { turks: 2, stbarths: 2 } },
+                    { text: "All-inclusive convenience", scores: { jamaica: 3, cruise: 2 } },
+                    { text: "Family-friendly resort", scores: { anguilla: 3, turks: 1 } },
+                    { text: "Boutique or eco-lodge", scores: { belize: 2, stlucia: 1 } }
+                ]
+            },
+            {
+                question: "Do you have a valid passport?",
+                options: [
+                    { text: "Yes, ready to go!", scores: {} },
+                    { text: "No, or not sure", scores: { usIslands: 4, cruise: 1 } }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let scores = {};
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function startQuiz() {
+            currentQuestion = 0;
+            scores = {};
+            showScreen('quiz');
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            const question = questions[currentQuestion];
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            
+            document.getElementById('questionNumber').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            document.getElementById('progressPercent').textContent = `${Math.round(progress)}%`;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            document.getElementById('questionText').textContent = question.question;
+            
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+            
+            question.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option.text;
+                btn.onclick = () => handleAnswer(option.scores);
+                container.appendChild(btn);
+            });
+        }
+
+        function handleAnswer(answerScores) {
+            Object.keys(answerScores).forEach(dest => {
+                scores[dest] = (scores[dest] || 0) + answerScores[dest];
+            });
+            
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                displayQuestion();
+            } else {
+                calculateMatch();
+            }
+        }
+
+        function calculateMatch() {
+            let maxScore = 0;
+            let bestMatch = 'cruise';
+            
+            Object.keys(scores).forEach(dest => {
+                if (scores[dest] > maxScore) {
+                    maxScore = scores[dest];
+                    bestMatch = dest;
+                }
+            });
+            
+            displayResults(bestMatch);
+        }
+
+        function displayResults(matchKey) {
+            const dest = destinations[matchKey];
+            
+            document.getElementById('resultIcon').textContent = dest.icon;
+            document.getElementById('resultName').textContent = dest.name;
+            document.getElementById('resultTagline').textContent = dest.tagline;
+            document.getElementById('resultDescription').textContent = dest.description;
+            document.getElementById('resultRecommendation').textContent = dest.recommendation;
+            
+            showScreen('results');
+        }
+
+        function resetQuiz() {
+            showScreen('welcome');
+            currentQuestion = 0;
+            scores = {};
+        }
+
+        function showAllDestinations() {
+            const grid = document.getElementById('destinationsGrid');
+            grid.innerHTML = '';
+            
+            Object.values(destinations).forEach(dest => {
+                const card = document.createElement('div');
+                card.className = 'dest-card';
+                card.innerHTML = `
+                    <div class="dest-header">
+                        <div class="dest-icon">${dest.icon}</div>
+                        <div class="dest-info">
+                            <h3>${dest.name}</h3>
+                            <div class="tagline">${dest.tagline}</div>
+                        </div>
+                    </div>
+                    <p class="description">${dest.description}</p>
+                    <p class="recommendation"><strong>Recommendation:</strong> ${dest.recommendation}</p>
+                `;
+                grid.appendChild(card);
+            });
+            
+            showScreen('allDestinations');
+        }
+    </script>
+</body>
+</html>
